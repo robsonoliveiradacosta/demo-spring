@@ -2,6 +2,7 @@ package com.example.demospring.restapi.service;
 
 import com.example.demospring.restapi.api.v1.contract.ProductRequest;
 import com.example.demospring.restapi.api.v1.contract.ProductResponse;
+import com.example.demospring.restapi.domain.exception.EntityNotFoundException;
 import com.example.demospring.restapi.domain.model.Product;
 import com.example.demospring.restapi.domain.repository.ProductRepository;
 import com.example.demospring.restapi.mapper.ProductMapper;
@@ -48,6 +49,7 @@ public class ProductService {
         try {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
+            throw new EntityNotFoundException(String.format("Product with id %d, not found", id));
         }
     }
 }

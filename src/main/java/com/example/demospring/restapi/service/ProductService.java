@@ -39,7 +39,8 @@ public class ProductService {
     }
 
     public ProductResponse update(Long id, ProductRequest request) {
-        Product product = repository.findById(id).orElseThrow();
+        Product product = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Product with id %d, not found", id)));
         mapper.update(request, product);
         repository.save(product);
         return mapper.map(product);

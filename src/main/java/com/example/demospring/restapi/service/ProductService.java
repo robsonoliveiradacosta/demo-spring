@@ -34,13 +34,12 @@ public class ProductService {
     }
 
     public ProductResponse findById(Long id) {
-        Product product = repository.findById(id).orElseThrow();
+        Product product = find(id);
         return mapper.map(product);
     }
 
     public ProductResponse update(Long id, ProductRequest request) {
-        Product product = repository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format("Product with id %d, not found", id)));
+        Product product = find(id);
         mapper.update(request, product);
         repository.save(product);
         return mapper.map(product);
@@ -52,5 +51,10 @@ public class ProductService {
         } catch (EmptyResultDataAccessException e) {
             throw new EntityNotFoundException(String.format("Product with id %d, not found", id));
         }
+    }
+
+    private Product find(Long id) {
+        return repository.findById(id).orElseThrow(
+                () -> new EntityNotFoundException(String.format("Product with id %d, not found", id)));
     }
 }
